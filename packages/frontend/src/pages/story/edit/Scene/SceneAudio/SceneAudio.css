@@ -1,0 +1,15 @@
+.scene-audio {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.scene-audio .button {
+  width: 192px;
+}
+
+audio {
+  display: block;
+  margin-bottom: 5px;
+}

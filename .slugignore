@@ -1,0 +1,12 @@
+.github/
+docs/
+__tests__/
+
+src/setupTests.js
+jest.config.js
+.slugignore
+config/localhost.json
+/packages/frontend/node_modules/
+
+README.md
+LICENSE

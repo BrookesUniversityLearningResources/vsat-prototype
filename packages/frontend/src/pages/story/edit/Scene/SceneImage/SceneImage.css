@@ -1,0 +1,18 @@
+.scene-image {
+  display: flex;
+  flex-direction: column;
+}
+
+.thumbnail {
+  width: 192px;
+  height: 192px;
+}
+
+.scene-image .button {
+  margin-top: 5px;
+  width: 192px;
+}
+
+.uppy-Dashboard-AddFiles-title {
+  margin: 10px;
+}

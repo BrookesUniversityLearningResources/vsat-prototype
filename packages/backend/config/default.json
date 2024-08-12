@@ -1,0 +1,19 @@
+{
+  "port": 5000,
+  "log": {
+    "name": "vsp",
+    "level": "info",
+    "redact": {
+      "paths": [
+        "story.scenes[*].content",
+        "scene.content",
+        "story.scene.passages",
+        "req.headers"
+      ]
+    }
+  },
+  "db": {
+    "connectionTimeoutMillis": 10000,
+    "port": 5432
+  }
+}

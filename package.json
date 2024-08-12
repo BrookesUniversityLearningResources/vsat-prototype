@@ -1,0 +1,39 @@
+{
+  "name": "vsp",
+  "version": "1.0.0",
+  "description": "The Virtual Storytelling Project",
+  "repository": "https://github.com/richdouglasevans/vsp.git",
+  "private": true,
+  "license": "CC0-1.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "heroku-postbuild": "yarn workspace @vsp/frontend build",
+    "start": "yarn backend:start",
+    "dev": "concurrently 'yarn backend:start' 'yarn frontend:start'",
+    "backend:start": "yarn workspace @vsp/backend prestart && yarn workspace @vsp/backend start",
+    "frontend:start": "yarn workspace @vsp/frontend start"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "concurrently": "^7.6.0",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.8.0",
+    "react": "^18.2.0"
+  },
+  "prettier": {
+    "singleQuote": true
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{md}": "prettier --write"
+  }
+}

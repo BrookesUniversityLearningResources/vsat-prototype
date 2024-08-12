@@ -1,0 +1,205 @@
+{% extends "layouts/main.njk" %}
+
+{% block head %}
+<script crossorigin="anonymous" src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+<script crossorigin="anonymous" src="https://unpkg.com/aframe-event-set-component@4.0.1/dist/aframe-event-set-component.min.js"></script>
+<script crossorigin="anonymous" src="https://rawgit.com/rdub80/aframe-gui/master/dist/aframe-gui.min.js"></script>
+
+<script>window.story = {{ story | dump | safe }};</script>
+
+<script>
+var CHARACTERS_PER_LINE = 43;
+var LINE_OFFSET = 1;
+
+function numberOfLines(content) {
+    var newlines = content.split('\n').length;
+    return (Math.trunc(content.length / CHARACTERS_PER_LINE)) + LINE_OFFSET + newlines;
+}
+
+function addPassageHeader(el, passage) {
+    var textEl = document.createElement('a-gui-label');
+    textEl.setAttribute('id', 'passageHeader');
+    textEl.setAttribute('value', passage.header.text);
+    textEl.setAttribute('width', '9.5');
+    textEl.setAttribute('height', '0.75');
+    textEl.setAttribute('margin', '-0.2 0 0 0.2');
+    textEl.setAttribute('font-weight', 'bold');
+    textEl.setAttribute('font-size', '200px');
+
+    el.appendChild(textEl);
+}
+
+function addPassageContent(el, passage) {
+    var textEl = document.createElement('a-troika-text');
+    textEl.setAttribute('id', 'passageContent');
+    textEl.setAttribute('value', passage.content);
+    textEl.setAttribute('max-width', '9.5');
+    textEl.setAttribute('font-size', '0.5');
+    textEl.setAttribute('baseline', 'top');
+    textEl.setAttribute('position', '-7 5 -5');
+
+    el.appendChild(textEl);
+}
+
+function addSky(el, scene) {
+    var skyEl = document.createElement('a-sky');
+    changeSceneImageTo(skyEl, scene.name);
+
+    el.appendChild(skyEl);
+}
+
+function changeSceneImageTo(el, imageId) {
+    el.setAttribute('material', 'src: #image-' + imageId);
+}
+
+function createExitElementFor(link) {
+    var exit = document.createElement('a-gui-button');
+
+    exit.setAttribute('value', link.text);
+    exit.setAttribute('exit', link.target);
+    exit.setAttribute('width', '9.5');
+    exit.setAttribute('height', '0.75');
+    exit.setAttribute('margin', '0.1 0 0 0.25');
+    exit.setAttribute('class', 'clickable');
+    return exit;
+}
+
+function addExitElements(el, passage) {
+    passage.links
+        .map(createExitElementFor)
+        .forEach(el.appendChild.bind(el));
+}
+
+function removeAllChildNodes(parent) {
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
+function setSceneAudio(parent, scene) {
+    if (!document.querySelector('#sceneAudio')) {
+        parent.appendChild(createSoundElementFor(scene));
+    }
+
+    var sceneAudioEl = document.querySelector('#sceneAudio');
+    sceneAudioEl.setAttribute('src', '#audio-' + scene.name);
+}
+
+function createSoundElementFor(scene) {
+    var soundEl = document.createElement('a-sound');
+
+    soundEl.setAttribute('id', 'sceneAudio');
+    soundEl.setAttribute('autoplay', true);
+    soundEl.setAttribute('positional', false);
+    soundEl.setAttribute('src', '#audio-' + scene.name);
+
+    return soundEl;
+}
+</script>
+
+<script>
+AFRAME.registerComponent('init-scene', {
+    init: function() {
+        window.currentScene = window.story.scenes[story.initialScene];
+        var initialPassage = window.currentScene.passages[window.currentScene.initialPassage];
+
+        var sceneEl = document.querySelector('a-scene');
+
+        addSky(sceneEl, window.currentScene);
+        addPassageHeader(document.querySelector('#ifHeader'), initialPassage);
+        addPassageContent(sceneEl, initialPassage);
+        addExitElements(document.querySelector('#ifExits'), initialPassage);
+
+        if (window.currentScene.audio) {
+            setSceneAudio(sceneEl, window.currentScene);
+        }
+    }
+});
+
+AFRAME.registerComponent('exit', {
+    init: function() {
+        var sceneEl = document.querySelector('a-scene');
+        var headerEl = document.querySelector('#passageHeader');
+        var contentEl = document.querySelector('#passageContent');
+        var exitsEl = document.querySelector('#ifExits');
+
+        var changeSceneImage = changeSceneImageTo.bind(null, document.querySelector('a-sky'));
+
+        this.el.addEventListener('click', function() {
+            var exit = this.getAttribute('exit');
+
+            var passage = null;
+
+            if (window.story.scenes[exit]) {
+                window.currentScene = window.story.scenes[exit];
+                passage = window.currentScene.passages[window.currentScene.initialPassage];
+                changeSceneImage(exit);
+
+                if (window.currentScene.audio) {
+                    setSceneAudio(sceneEl, window.currentScene);
+                }
+            } else {
+                passage = window.currentScene.passages[exit];
+            }
+
+            headerEl.setAttribute('value', passage.header.text);
+            contentEl.setAttribute('value', passage.content);
+
+            removeAllChildNodes(exitsEl);
+            addExitElements(exitsEl, passage);
+        });
+    }
+});
+</script>
+{% endblock %}
+
+{% block body %}
+<a-scene init-scene>
+
+   <a-assets>
+       {% for name, scene in story.scenes %}
+       <img id="image-{{name}}" src="{{scene.image.url}}" crossorigin="anonymous" />
+       {% if scene.audio and scene.audio.url %}
+       <audio id="audio-{{name}}" src="{{scene.audio.url}}" crossorigin="anonymous" />
+       {% endif %}
+       {% endfor %}
+   </a-assets>
+
+   <a-entity id="hand" laser-controls raycaster="objects: .clickable"></a-entity>
+
+   <a-gui-flex-container
+       id="ifHeader"
+       flex-direction="column"
+       component-padding="1"
+       opacity="0"
+       width="10"
+       height="1"
+       position="-7 6 -5">
+   </a-gui-flex-container>
+
+   <a-gui-flex-container
+       id="ifPassageContentBackground"
+       flex-direction="column"
+       opacity="0.7"
+       width="10"
+       height="9"
+       position="-7 2 -5.01">
+   </a-gui-flex-container>
+
+   <a-gui-flex-container
+       id="ifExits"
+       flex-direction="column"
+       justify-content="center"
+       opacity="0.7"
+       width="10"
+       height="3"
+       position="-7 0 -4.9">
+   </a-gui-flex-container>
+
+   <a-camera position="0 0 6">
+      <a-cursor />
+   </a-camera>
+
+</a-scene>
+
+{% endblock %}

@@ -1,0 +1,21 @@
+{
+    "__meta__": {
+        "about": "HTTPie session file",
+        "help": "https://httpie.org/doc#sessions",
+        "httpie": "2.4.0"
+    },
+    "auth": {
+        "password": null,
+        "type": null,
+        "username": null
+    },
+    "cookies": {
+        "connect.sid": {
+            "expires": 1626100090,
+            "path": "/",
+            "secure": false,
+            "value": "s%3AM1E-X-1PK_viDoTvp_fpY73SowR6AK1W.4O3b3PINrgCxFTKnN0%2F6ynuvZEdR2bbr8hCPYfaD2Cg"
+        }
+    },
+    "headers": {}
+}

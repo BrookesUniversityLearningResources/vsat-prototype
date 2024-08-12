@@ -1,0 +1,23 @@
+.scene-fiction {
+  border: 1px solid white;
+  font-size: 16px;
+  width: 100%;
+  height: 100%;
+  padding: 0 5px 5px 5px;
+}
+
+.scene-fiction [role='textbox'] {
+  background-color: whitesmoke;
+  color: #282c34;
+}
+
+div[role='textbox'] {
+  padding-left: 10px;
+  padding-right: 0;
+}
+
+.menu {
+  margin-bottom: 0;
+  padding-top: 2px;
+  padding-bottom: 5px;
+}

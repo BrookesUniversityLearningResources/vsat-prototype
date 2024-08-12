@@ -1,0 +1,7 @@
+.page-login-callback {
+  height: 60vh;
+}
+
+.page-login-callback .column {
+  max-width: 600px;
+}

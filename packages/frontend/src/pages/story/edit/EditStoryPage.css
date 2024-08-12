@@ -1,0 +1,54 @@
+.page-editStory {
+  margin: 5px;
+  display: flex;
+}
+
+main {
+  flex: 3 1 auto;
+  margin: 10px 20px 10px 10px;
+  background-color: #282c34 !important;
+  color: whitesmoke;
+}
+
+aside {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid gray;
+  width: 25% !important;
+}
+
+.help {
+  background-color: whitesmoke;
+  color: #282c34;
+  font-size: calc(10px + 1vmin);
+}
+
+.view {
+  color: white;
+}
+
+div.pusher {
+  width: 75%;
+}
+
+main div.story-header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  align-content: space-between;
+  justify-content: space-between;
+}
+
+.story-header h1 {
+  display: inline-block;
+  flex: 3;
+}
+
+.buttons a:hover {
+  color: white;
+}
+
+.backToStories {
+  color: white;
+  font-size: small;
+}

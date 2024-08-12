@@ -1,0 +1,15 @@
+.page-login {
+  height: 60vh;
+}
+
+.page-login .column {
+  max-width: 450px;
+}
+
+.page-login-pending {
+  height: 60vh;
+}
+
+.page-login-pending .column {
+  max-width: 600px;
+}

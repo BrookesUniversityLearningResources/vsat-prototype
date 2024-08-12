@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -e
+
+declare DATABASE_NAME='vsp'
+declare DATABASE_USER='dante'
+declare DATABASE_PASSWORD='plantF4n'
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+
+    CREATE USER ${DATABASE_USER} with password '${DATABASE_PASSWORD}';
+
+    CREATE DATABASE ${DATABASE_NAME};
+
+    GRANT ALL PRIVILEGES ON DATABASE ${DATABASE_NAME} TO ${DATABASE_USER};
+
+EOSQL
